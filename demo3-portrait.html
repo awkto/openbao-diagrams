@@ -79,38 +79,38 @@
         </filter>
       </defs>
 
-      <!-- User → sign pubkey → Bao (left side, outside boxes) -->
-      <line x1="155" y1="90" x2="155" y2="235"
+      <!-- User → sign pubkey → Bao -->
+      <line x1="210" y1="85" x2="210" y2="230"
             stroke="rgba(192,132,252,.4)" stroke-width="2" marker-end="url(#arr-purple)"/>
-      <text x="118" y="165" text-anchor="middle" font-family="JetBrains Mono, monospace"
-            font-size="13" fill="rgba(192,132,252,.5)" transform="rotate(-90, 118, 165)" filter="url(#lbg)">pubkey</text>
+      <text x="255" y="155" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="13" fill="rgba(192,132,252,.5)" filter="url(#lbg)">sign pubkey</text>
 
-      <!-- Bao → signed cert → User (right side, outside boxes) -->
-      <line x1="325" y1="235" x2="325" y2="90"
+      <!-- Bao → signed cert → User -->
+      <line x1="270" y1="230" x2="270" y2="85"
             stroke="rgba(245,169,67,.5)" stroke-width="2" marker-end="url(#arr-orange)"/>
-      <text x="362" y="165" text-anchor="middle" font-family="JetBrains Mono, monospace"
-            font-size="13" fill="rgba(245,169,67,.5)" transform="rotate(90, 362, 165)" filter="url(#lbg)">signed cert</text>
+      <text x="330" y="155" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="13" fill="rgba(245,169,67,.5)" filter="url(#lbg)">signed cert</text>
 
       <!-- User → SSH → Host (left arc) -->
-      <path d="M 170 90 Q 60 290 170 450"
+      <path d="M 190 85 Q 70 290 190 445"
             stroke="rgba(46,204,122,.4)" stroke-width="2" fill="none" marker-end="url(#arr-green)"/>
-      <text x="75" y="290" text-anchor="middle" font-family="JetBrains Mono, monospace"
-            font-size="13" fill="rgba(46,204,122,.45)" transform="rotate(-90, 75, 290)" filter="url(#lbg)">SSH with cert</text>
+      <text x="88" y="290" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="13" fill="rgba(46,204,122,.45)" transform="rotate(-90, 88, 290)" filter="url(#lbg)">SSH with cert</text>
 
       <!-- Bao CA → Host (right arc, dashed) -->
-      <path d="M 310 295 Q 410 390 310 450"
+      <path d="M 290 290 Q 400 390 290 445"
             stroke="rgba(245,169,67,.3)" stroke-width="1.5" fill="none" stroke-dasharray="5 4" marker-end="url(#arr-orange)"/>
-      <text x="398" y="375" text-anchor="middle" font-family="JetBrains Mono, monospace"
-            font-size="11" fill="rgba(245,169,67,.35)" transform="rotate(90, 398, 375)" filter="url(#lbg)">TrustedCA</text>
+      <text x="388" y="380" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="11" fill="rgba(245,169,67,.35)" transform="rotate(90, 388, 380)" filter="url(#lbg)">TrustedCA</text>
 
       <!-- Expire divider -->
       <line x1="30" y1="420" x2="450" y2="420"
             stroke="rgba(224,92,92,.2)" stroke-width="1" stroke-dasharray="4 6"/>
 
       <!-- Blocked after expiry -->
-      <path d="M 165 95 Q 50 295 165 455"
+      <path d="M 185 90 Q 60 295 185 450"
             stroke="rgba(224,92,92,.2)" stroke-width="1.5" fill="none" stroke-dasharray="4 5"/>
-      <text x="52" y="300" text-anchor="middle" font-family="Inter, sans-serif"
+      <text x="62" y="300" text-anchor="middle" font-family="Inter, sans-serif"
             font-size="20" fill="rgba(224,92,92,.6)" filter="url(#lbg)">✕</text>
     </svg>
 

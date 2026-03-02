@@ -35,6 +35,7 @@
     font-family: 'JetBrains Mono', monospace; font-size: 10px;
     font-weight: 500; letter-spacing: .08em; opacity: .55; text-transform: uppercase;
   }
+  /* Vertical chain: Root → Bao(Intermediate) → acme.sh → Web Server */
   .node.root { top: 7%; left: 50%; }
   .node.root .node-box { color: rgba(245,169,67,.55); border-color: rgba(245,169,67,.3); background: rgba(245,169,67,.04); font-size: 14px; padding: 10px 20px; }
   .node.bao { top: 30%; left: 50%; }
@@ -45,6 +46,7 @@
   .node.acme .node-sub { color: #3db4f5; }
   .node.web { top: 88%; left: 50%; }
   .node.web .node-box { color: #2ecc7a; border-color: rgba(46,204,122,.5); background: rgba(46,204,122,.08); }
+  .node.web .node-sub { color: #2ecc7a; }
   svg.arrows { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
   .badge {
     position: absolute; font-family: 'JetBrains Mono', monospace;
@@ -79,26 +81,26 @@
       <!-- Root → signs → Bao -->
       <line x1="240" y1="62" x2="240" y2="148"
             stroke="rgba(245,169,67,.3)" stroke-width="1.5" stroke-dasharray="5 4"/>
-      <text x="280" y="110" text-anchor="middle" font-family="JetBrains Mono, monospace"
+      <text x="285" y="110" text-anchor="middle" font-family="JetBrains Mono, monospace"
             font-size="12" fill="rgba(245,169,67,.3)" filter="url(#lbg)">signs</text>
 
-      <!-- acme.sh → ACME → Bao (left side, outside boxes) -->
-      <line x1="155" y1="325" x2="155" y2="200"
+      <!-- acme.sh → ACME challenge → Bao -->
+      <line x1="210" y1="320" x2="210" y2="200"
             stroke="rgba(61,180,245,.4)" stroke-width="2" marker-end="url(#arr-blue)"/>
-      <text x="118" y="265" text-anchor="middle" font-family="JetBrains Mono, monospace"
-            font-size="13" fill="rgba(61,180,245,.5)" transform="rotate(-90, 118, 265)" filter="url(#lbg)">ACME</text>
+      <text x="250" y="260" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="13" fill="rgba(61,180,245,.5)" filter="url(#lbg)">ACME</text>
 
-      <!-- Bao → TLS cert → acme.sh (right side, outside boxes) -->
-      <line x1="325" y1="200" x2="325" y2="325"
+      <!-- Bao → TLS cert → acme.sh -->
+      <line x1="270" y1="200" x2="270" y2="320"
             stroke="rgba(245,169,67,.5)" stroke-width="2" marker-end="url(#arr-orange)"/>
-      <text x="362" y="265" text-anchor="middle" font-family="JetBrains Mono, monospace"
-            font-size="13" fill="rgba(245,169,67,.5)" transform="rotate(90, 362, 265)" filter="url(#lbg)">TLS cert</text>
+      <text x="320" y="260" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="13" fill="rgba(245,169,67,.5)" filter="url(#lbg)">TLS cert</text>
 
       <!-- acme.sh → install → Web Server -->
-      <line x1="240" y1="382" x2="240" y2="485"
+      <line x1="240" y1="375" x2="240" y2="478"
             stroke="rgba(46,204,122,.4)" stroke-width="2" marker-end="url(#arr-green)"/>
-      <text x="200" y="438" text-anchor="middle" font-family="JetBrains Mono, monospace"
-            font-size="13" fill="rgba(46,204,122,.45)" transform="rotate(-90, 200, 438)" filter="url(#lbg)">install cert</text>
+      <text x="295" y="430" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="13" fill="rgba(46,204,122,.45)" filter="url(#lbg)">install cert</text>
     </svg>
 
     <div class="node root">
