@@ -1,0 +1,82 @@
+digraph demo1 {
+    bgcolor="#0d1117"
+    rankdir=TB
+    dpi=150
+    pad=0.5
+    nodesep=0.8
+    ranksep=1.2
+
+    node [
+        shape=box
+        style="rounded,filled"
+        fontname="Inter"
+        fontsize=16
+        penwidth=2
+        width=2.2
+        height=0.6
+    ]
+
+    edge [
+        fontname="JetBrains Mono"
+        fontsize=11
+        penwidth=2
+    ]
+
+    ci [
+        label="GitLab CI/CD"
+        fillcolor="#0d1117"
+        fontcolor="#3db4f5"
+        color="#3db4f580"
+    ]
+
+    bao [
+        label="OpenBao\n(SSH CA)"
+        fillcolor="#0d1117"
+        fontcolor="#f5a943"
+        color="#f5a94380"
+    ]
+
+    host [
+        label="Target Host"
+        fillcolor="#0d1117"
+        fontcolor="#2ecc7a"
+        color="#2ecc7a80"
+    ]
+
+    ci -> bao [
+        label="AppRole login"
+        color="#3db4f566"
+        fontcolor="#3db4f580"
+    ]
+
+    bao -> ci [
+        label="SSH cert"
+        color="#f5a94380"
+        fontcolor="#f5a94380"
+    ]
+
+    bao -> host [
+        label="TrustedCA"
+        color="#f5a9434d"
+        fontcolor="#f5a94359"
+        style=dashed
+    ]
+
+    ci -> host [
+        label="deploy via cert"
+        color="#2ecc7a66"
+        fontcolor="#2ecc7a73"
+    ]
+
+    ttl [
+        label="30 min TTL"
+        shape=none
+        fillcolor=none
+        style=""
+        fontname="JetBrains Mono"
+        fontsize=12
+        fontcolor="#e05c5ccc"
+    ]
+
+    host -> ttl [style=invis]
+}
