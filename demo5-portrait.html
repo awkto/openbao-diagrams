@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo 5 – Transit Signing (Portrait)</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0d1117;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+  }
+  .slide { width: 480px; padding: 36px 32px 40px; }
+  .slide-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; font-weight: 700;
+    letter-spacing: .14em; text-transform: uppercase;
+    color: #3db4f5; margin-bottom: 32px;
+  }
+  .diagram { position: relative; width: 100%; height: 580px; }
+  .node {
+    position: absolute; display: flex; flex-direction: column;
+    align-items: center; gap: 6px; transform: translate(-50%, -50%);
+  }
+  .node-box {
+    padding: 14px 24px; border-radius: 10px; font-size: 16px;
+    font-weight: 700; border: 2px solid; white-space: nowrap;
+  }
+  .node-sub {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    font-weight: 500; letter-spacing: .08em; opacity: .55; text-transform: uppercase;
+  }
+  /* CI top-left, Bao right, End User bottom-left */
+  .node.ci { top: 14%; left: 30%; }
+  .node.ci .node-box { color: #3db4f5; border-color: rgba(61,180,245,.5); background: rgba(61,180,245,.08); }
+  .node.bao { top: 40%; left: 75%; }
+  .node.bao .node-box { color: #f5a943; border-color: rgba(245,169,67,.5); background: rgba(245,169,67,.08); }
+  .node.bao .node-sub { color: #f5a943; }
+  .node.enduser { top: 72%; left: 30%; }
+  .node.enduser .node-box { color: #2ecc7a; border-color: rgba(46,204,122,.5); background: rgba(46,204,122,.08); }
+  .node.enduser .node-sub { color: #2ecc7a; }
+  svg.arrows { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .badge {
+    position: absolute; font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 700; letter-spacing: .1em;
+    text-transform: uppercase; background: #0d1117;
+    padding: 4px 14px; border-radius: 99px; white-space: nowrap; z-index: 10;
+  }
+  .badge.key {
+    top: 14%; left: 75%; transform: translate(-50%, -130%);
+    color: rgba(245,169,67,.55); border: 1.5px solid rgba(245,169,67,.25);
+    font-size: 10px;
+  }
+  .badge.valid {
+    top: 92%; left: 28%; transform: translate(-50%, -50%);
+    color: rgba(46,204,122,.8); border: 1.5px solid rgba(46,204,122,.35);
+  }
+  .badge.tamper {
+    top: 92%; left: 72%; transform: translate(-50%, -50%);
+    color: rgba(224,92,92,.8); border: 1.5px solid rgba(224,92,92,.35);
+  }
+  .lane-divider {
+    position: absolute; top: 52%; left: 8%; width: 42%;
+    border-top: 1.5px dashed rgba(255,255,255,.06);
+  }
+  .lane-label {
+    position: absolute; font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; font-weight: 700; letter-spacing: .14em;
+    text-transform: uppercase; color: rgba(255,255,255,.08);
+  }
+  .lane-label.sign { top: 5%; left: 8%; }
+  .lane-label.verify { top: 55%; left: 8%; }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="slide-title">Demo 5 · Transit Binary Signing</div>
+  <div class="diagram">
+    <div class="lane-divider"></div>
+    <div class="lane-label sign">Sign</div>
+    <div class="lane-label verify">Verify</div>
+
+    <svg class="arrows" viewBox="0 0 480 580" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr-blue" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L9,3 z" fill="rgba(61,180,245,.5)"/></marker>
+        <marker id="arr-orange" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L9,3 z" fill="rgba(245,169,67,.6)"/></marker>
+        <marker id="arr-green" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L9,3 z" fill="rgba(46,204,122,.6)"/></marker>
+        <filter id="lbg" x="-20%" y="-40%" width="140%" height="180%">
+          <feFlood flood-color="#0d1117" result="bg"/>
+          <feMerge><feMergeNode in="bg"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- CI → hash → Bao -->
+      <line x1="195" y1="70" x2="310" y2="200"
+            stroke="rgba(61,180,245,.4)" stroke-width="2" marker-end="url(#arr-blue)"/>
+      <text x="225" y="150" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="13" fill="rgba(61,180,245,.5)" transform="rotate(-47, 225, 150)" filter="url(#lbg)">SHA-256</text>
+
+      <!-- Bao → signature → CI -->
+      <line x1="315" y1="215" x2="200" y2="90"
+            stroke="rgba(245,169,67,.5)" stroke-width="2" marker-end="url(#arr-orange)"/>
+      <text x="300" y="140" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="13" fill="rgba(245,169,67,.5)" transform="rotate(-47, 300, 140)" filter="url(#lbg)">signature</text>
+
+      <!-- CI → binary+sig → End User (vertical left) -->
+      <line x1="144" y1="110" x2="144" y2="385"
+            stroke="rgba(46,204,122,.35)" stroke-width="2" marker-end="url(#arr-green)"/>
+      <text x="118" y="260" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="12" fill="rgba(46,204,122,.4)" transform="rotate(-90, 118, 260)" filter="url(#lbg)">binary + sig</text>
+
+      <!-- End User → verify → Bao -->
+      <line x1="195" y1="410" x2="310" y2="265"
+            stroke="rgba(46,204,122,.3)" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arr-green)"/>
+      <text x="290" y="360" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="13" fill="rgba(46,204,122,.4)" transform="rotate(-47, 290, 360)" filter="url(#lbg)">verify</text>
+    </svg>
+
+    <div class="node ci">
+      <div class="node-box">CI Runner</div>
+    </div>
+    <div class="node bao">
+      <div class="node-box">OpenBao</div>
+      <span class="node-sub">Transit</span>
+    </div>
+    <div class="node enduser">
+      <div class="node-box">End User</div>
+    </div>
+    <div class="badge key">Key never leaves</div>
+    <div class="badge valid">✓ Valid</div>
+    <div class="badge tamper">✕ Tampered</div>
+  </div>
+</div>
+</body>
+</html>

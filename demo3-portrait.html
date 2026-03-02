@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo 3 – Interactive SSH (Portrait)</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0d1117;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+  }
+  .slide { width: 480px; padding: 36px 32px 40px; }
+  .slide-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; font-weight: 700;
+    letter-spacing: .14em; text-transform: uppercase;
+    color: #3db4f5; margin-bottom: 32px;
+  }
+  .diagram { position: relative; width: 100%; height: 580px; }
+  .node {
+    position: absolute; display: flex; flex-direction: column;
+    align-items: center; gap: 6px; transform: translate(-50%, -50%);
+  }
+  .node-box {
+    padding: 14px 24px; border-radius: 10px; font-size: 16px;
+    font-weight: 700; border: 2px solid; white-space: nowrap;
+  }
+  .node-sub {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    font-weight: 500; letter-spacing: .08em; opacity: .55; text-transform: uppercase;
+  }
+  .node.user { top: 10%; left: 50%; }
+  .node.user .node-box { color: #c084fc; border-color: rgba(192,132,252,.5); background: rgba(192,132,252,.08); }
+  .node.bao { top: 45%; left: 50%; }
+  .node.bao .node-box { color: #f5a943; border-color: rgba(245,169,67,.5); background: rgba(245,169,67,.08); }
+  .node.bao .node-sub { color: #f5a943; }
+  .node.host { top: 82%; left: 50%; }
+  .node.host .node-box { color: #2ecc7a; border-color: rgba(46,204,122,.5); background: rgba(46,204,122,.08); }
+  .node.host .node-sub { color: #2ecc7a; }
+  svg.arrows { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .badge {
+    position: absolute; font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 700; letter-spacing: .1em;
+    text-transform: uppercase; background: #0d1117;
+    padding: 4px 14px; border-radius: 99px; white-space: nowrap; z-index: 10;
+  }
+  .badge.expire {
+    top: 95%; left: 50%; transform: translate(-50%, -50%);
+    color: rgba(224,92,92,.8); border: 1.5px solid rgba(224,92,92,.35);
+  }
+  .badge.same-ca {
+    top: 55%; left: 50%; transform: translate(-50%, -50%);
+    color: rgba(245,169,67,.45); border: 1.5px solid rgba(245,169,67,.2);
+    font-size: 10px;
+  }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="slide-title">Demo 3 · Interactive SSH Access</div>
+  <div class="diagram">
+    <svg class="arrows" viewBox="0 0 480 580" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr-purple" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L9,3 z" fill="rgba(192,132,252,.5)"/></marker>
+        <marker id="arr-orange" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L9,3 z" fill="rgba(245,169,67,.6)"/></marker>
+        <marker id="arr-green" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L9,3 z" fill="rgba(46,204,122,.6)"/></marker>
+        <filter id="lbg" x="-20%" y="-40%" width="140%" height="180%">
+          <feFlood flood-color="#0d1117" result="bg"/>
+          <feMerge><feMergeNode in="bg"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- User → sign pubkey → Bao -->
+      <line x1="210" y1="85" x2="210" y2="230"
+            stroke="rgba(192,132,252,.4)" stroke-width="2" marker-end="url(#arr-purple)"/>
+      <text x="255" y="155" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="13" fill="rgba(192,132,252,.5)" filter="url(#lbg)">sign pubkey</text>
+
+      <!-- Bao → signed cert → User -->
+      <line x1="270" y1="230" x2="270" y2="85"
+            stroke="rgba(245,169,67,.5)" stroke-width="2" marker-end="url(#arr-orange)"/>
+      <text x="330" y="155" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="13" fill="rgba(245,169,67,.5)" filter="url(#lbg)">signed cert</text>
+
+      <!-- User → SSH → Host (left arc) -->
+      <path d="M 190 85 Q 70 290 190 445"
+            stroke="rgba(46,204,122,.4)" stroke-width="2" fill="none" marker-end="url(#arr-green)"/>
+      <text x="88" y="290" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="13" fill="rgba(46,204,122,.45)" transform="rotate(-90, 88, 290)" filter="url(#lbg)">SSH with cert</text>
+
+      <!-- Bao CA → Host (right arc, dashed) -->
+      <path d="M 290 290 Q 400 390 290 445"
+            stroke="rgba(245,169,67,.3)" stroke-width="1.5" fill="none" stroke-dasharray="5 4" marker-end="url(#arr-orange)"/>
+      <text x="388" y="380" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="11" fill="rgba(245,169,67,.35)" transform="rotate(90, 388, 380)" filter="url(#lbg)">TrustedCA</text>
+
+      <!-- Expire divider -->
+      <line x1="30" y1="420" x2="450" y2="420"
+            stroke="rgba(224,92,92,.2)" stroke-width="1" stroke-dasharray="4 6"/>
+
+      <!-- Blocked after expiry -->
+      <path d="M 185 90 Q 60 295 185 450"
+            stroke="rgba(224,92,92,.2)" stroke-width="1.5" fill="none" stroke-dasharray="4 5"/>
+      <text x="62" y="300" text-anchor="middle" font-family="Inter, sans-serif"
+            font-size="20" fill="rgba(224,92,92,.6)" filter="url(#lbg)">✕</text>
+    </svg>
+
+    <div class="node user">
+      <div class="node-box">User</div>
+    </div>
+    <div class="node bao">
+      <div class="node-box">OpenBao</div>
+      <span class="node-sub">SSH CA</span>
+    </div>
+    <div class="node host">
+      <div class="node-box">Target Host</div>
+      <span class="node-sub">sshd</span>
+    </div>
+    <div class="badge same-ca">Same CA as Demo 1</div>
+    <div class="badge expire">⏱ 5 min TTL</div>
+  </div>
+</div>
+</body>
+</html>

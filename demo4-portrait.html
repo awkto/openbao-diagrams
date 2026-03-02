@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo 4 – PKI ACME (Portrait)</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0d1117;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+  }
+  .slide { width: 480px; padding: 36px 32px 40px; }
+  .slide-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; font-weight: 700;
+    letter-spacing: .14em; text-transform: uppercase;
+    color: #3db4f5; margin-bottom: 32px;
+  }
+  .diagram { position: relative; width: 100%; height: 580px; }
+  .node {
+    position: absolute; display: flex; flex-direction: column;
+    align-items: center; gap: 6px; transform: translate(-50%, -50%);
+  }
+  .node-box {
+    padding: 14px 24px; border-radius: 10px; font-size: 16px;
+    font-weight: 700; border: 2px solid; white-space: nowrap;
+  }
+  .node-sub {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    font-weight: 500; letter-spacing: .08em; opacity: .55; text-transform: uppercase;
+  }
+  /* Vertical chain: Root → Bao(Intermediate) → acme.sh → Web Server */
+  .node.root { top: 7%; left: 50%; }
+  .node.root .node-box { color: rgba(245,169,67,.55); border-color: rgba(245,169,67,.3); background: rgba(245,169,67,.04); font-size: 14px; padding: 10px 20px; }
+  .node.bao { top: 30%; left: 50%; }
+  .node.bao .node-box { color: #f5a943; border-color: rgba(245,169,67,.5); background: rgba(245,169,67,.08); }
+  .node.bao .node-sub { color: #f5a943; }
+  .node.acme { top: 60%; left: 50%; }
+  .node.acme .node-box { color: #3db4f5; border-color: rgba(61,180,245,.5); background: rgba(61,180,245,.08); }
+  .node.acme .node-sub { color: #3db4f5; }
+  .node.web { top: 88%; left: 50%; }
+  .node.web .node-box { color: #2ecc7a; border-color: rgba(46,204,122,.5); background: rgba(46,204,122,.08); }
+  .node.web .node-sub { color: #2ecc7a; }
+  svg.arrows { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .badge {
+    position: absolute; font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 700; letter-spacing: .1em;
+    text-transform: uppercase; background: #0d1117;
+    padding: 4px 14px; border-radius: 99px; white-space: nowrap; z-index: 10;
+  }
+  .badge.tls {
+    top: 96%; left: 50%; transform: translate(-50%, -50%);
+    color: rgba(46,204,122,.8); border: 1.5px solid rgba(46,204,122,.35);
+  }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="slide-title">Demo 4 · PKI &amp; ACME Certs</div>
+  <div class="diagram">
+    <svg class="arrows" viewBox="0 0 480 580" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr-orange" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L9,3 z" fill="rgba(245,169,67,.5)"/></marker>
+        <marker id="arr-blue" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L9,3 z" fill="rgba(61,180,245,.5)"/></marker>
+        <marker id="arr-green" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L9,3 z" fill="rgba(46,204,122,.6)"/></marker>
+        <filter id="lbg" x="-20%" y="-40%" width="140%" height="180%">
+          <feFlood flood-color="#0d1117" result="bg"/>
+          <feMerge><feMergeNode in="bg"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- Root → signs → Bao -->
+      <line x1="240" y1="62" x2="240" y2="148"
+            stroke="rgba(245,169,67,.3)" stroke-width="1.5" stroke-dasharray="5 4"/>
+      <text x="285" y="110" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="12" fill="rgba(245,169,67,.3)" filter="url(#lbg)">signs</text>
+
+      <!-- acme.sh → ACME challenge → Bao -->
+      <line x1="210" y1="320" x2="210" y2="200"
+            stroke="rgba(61,180,245,.4)" stroke-width="2" marker-end="url(#arr-blue)"/>
+      <text x="250" y="260" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="13" fill="rgba(61,180,245,.5)" filter="url(#lbg)">ACME</text>
+
+      <!-- Bao → TLS cert → acme.sh -->
+      <line x1="270" y1="200" x2="270" y2="320"
+            stroke="rgba(245,169,67,.5)" stroke-width="2" marker-end="url(#arr-orange)"/>
+      <text x="320" y="260" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="13" fill="rgba(245,169,67,.5)" filter="url(#lbg)">TLS cert</text>
+
+      <!-- acme.sh → install → Web Server -->
+      <line x1="240" y1="375" x2="240" y2="478"
+            stroke="rgba(46,204,122,.4)" stroke-width="2" marker-end="url(#arr-green)"/>
+      <text x="295" y="430" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="13" fill="rgba(46,204,122,.45)" filter="url(#lbg)">install cert</text>
+    </svg>
+
+    <div class="node root">
+      <div class="node-box">Root CA</div>
+    </div>
+    <div class="node bao">
+      <div class="node-box">OpenBao</div>
+      <span class="node-sub">Intermediate CA</span>
+    </div>
+    <div class="node acme">
+      <div class="node-box">acme.sh</div>
+      <span class="node-sub">ACME Client</span>
+    </div>
+    <div class="node web">
+      <div class="node-box">Web Server</div>
+    </div>
+    <div class="badge tls">Self-Signed → CA-Signed</div>
+  </div>
+</div>
+</body>
+</html>

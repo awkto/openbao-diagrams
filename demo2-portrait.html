@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo 2 – Dynamic DB Creds (Portrait)</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0d1117;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+  }
+  .slide { width: 480px; padding: 36px 32px 40px; }
+  .slide-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; font-weight: 700;
+    letter-spacing: .14em; text-transform: uppercase;
+    color: #3db4f5; margin-bottom: 32px;
+  }
+  .diagram { position: relative; width: 100%; height: 580px; }
+  .node {
+    position: absolute; display: flex; flex-direction: column;
+    align-items: center; gap: 6px; transform: translate(-50%, -50%);
+  }
+  .node-box {
+    padding: 14px 24px; border-radius: 10px; font-size: 16px;
+    font-weight: 700; border: 2px solid; white-space: nowrap;
+  }
+  .node-sub {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    font-weight: 500; letter-spacing: .08em; opacity: .55; text-transform: uppercase;
+  }
+  .node.app { top: 10%; left: 50%; }
+  .node.app .node-box { color: #3db4f5; border-color: rgba(61,180,245,.5); background: rgba(61,180,245,.08); }
+  .node.bao { top: 45%; left: 50%; }
+  .node.bao .node-box { color: #f5a943; border-color: rgba(245,169,67,.5); background: rgba(245,169,67,.08); }
+  .node.bao .node-sub { color: #f5a943; }
+  .node.pg { top: 82%; left: 50%; }
+  .node.pg .node-box { color: #2ecc7a; border-color: rgba(46,204,122,.5); background: rgba(46,204,122,.08); }
+  svg.arrows { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .badge {
+    position: absolute; font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 700; letter-spacing: .1em;
+    text-transform: uppercase; background: #0d1117;
+    padding: 4px 14px; border-radius: 99px; white-space: nowrap; z-index: 10;
+  }
+  .badge.expire {
+    top: 95%; left: 50%; transform: translate(-50%, -50%);
+    color: rgba(224,92,92,.8); border: 1.5px solid rgba(224,92,92,.35);
+  }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="slide-title">Demo 2 · Dynamic DB Credentials</div>
+  <div class="diagram">
+    <svg class="arrows" viewBox="0 0 480 580" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr-blue" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L9,3 z" fill="rgba(61,180,245,.5)"/></marker>
+        <marker id="arr-green" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L9,3 z" fill="rgba(46,204,122,.6)"/></marker>
+        <marker id="arr-red" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L9,3 z" fill="rgba(224,92,92,.7)"/></marker>
+        <filter id="lbg" x="-20%" y="-40%" width="140%" height="180%">
+          <feFlood flood-color="#0d1117" result="bg"/>
+          <feMerge><feMergeNode in="bg"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- App → request creds → Bao -->
+      <line x1="210" y1="85" x2="210" y2="230"
+            stroke="rgba(61,180,245,.4)" stroke-width="2" marker-end="url(#arr-blue)"/>
+      <text x="255" y="155" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="13" fill="rgba(61,180,245,.5)" filter="url(#lbg)">request creds</text>
+
+      <!-- Bao → temp creds → App -->
+      <line x1="270" y1="230" x2="270" y2="85"
+            stroke="rgba(46,204,122,.5)" stroke-width="2" marker-end="url(#arr-green)"/>
+      <text x="330" y="155" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="13" fill="rgba(46,204,122,.5)" filter="url(#lbg)">temp creds</text>
+
+      <!-- App → connect → PG (left arc) -->
+      <path d="M 190 85 Q 70 290 190 445"
+            stroke="rgba(46,204,122,.4)" stroke-width="2" fill="none" marker-end="url(#arr-green)"/>
+      <text x="88" y="290" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="13" fill="rgba(46,204,122,.4)" transform="rotate(-90, 88, 290)" filter="url(#lbg)">connect</text>
+
+      <!-- Lease expires divider -->
+      <line x1="30" y1="400" x2="450" y2="400"
+            stroke="rgba(224,92,92,.2)" stroke-width="1" stroke-dasharray="4 6"/>
+
+      <!-- Bao → revoke → PG (right arc) -->
+      <path d="M 290 290 Q 410 390 290 445"
+            stroke="rgba(224,92,92,.6)" stroke-width="1.5" fill="none" stroke-dasharray="6 4" marker-end="url(#arr-red)"/>
+      <text x="395" y="380" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="12" fill="rgba(224,92,92,.6)" transform="rotate(90, 395, 380)" filter="url(#lbg)">DROP ROLE</text>
+
+      <!-- Blocked connect -->
+      <path d="M 185 90 Q 60 295 185 450"
+            stroke="rgba(224,92,92,.2)" stroke-width="1.5" fill="none" stroke-dasharray="4 5"/>
+      <text x="62" y="300" text-anchor="middle" font-family="Inter, sans-serif"
+            font-size="20" fill="rgba(224,92,92,.6)" filter="url(#lbg)">✕</text>
+    </svg>
+
+    <div class="node app">
+      <div class="node-box">Web App</div>
+    </div>
+    <div class="node bao">
+      <div class="node-box">OpenBao</div>
+      <span class="node-sub">Database Engine</span>
+    </div>
+    <div class="node pg">
+      <div class="node-box">PostgreSQL</div>
+    </div>
+    <div class="badge expire">⏱ Lease Expires</div>
+  </div>
+</div>
+</body>
+</html>
