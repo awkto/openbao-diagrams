@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo 1 – CI/CD Deployment with SSH Certificates</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: #0d1117;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .slide {
+    width: 820px;
+    padding: 40px 48px 48px;
+  }
+
+  .slide-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: #3db4f5;
+    margin-bottom: 36px;
+  }
+
+  .diagram {
+    position: relative;
+    width: 100%;
+    height: 480px;
+  }
+
+  .node {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    transform: translate(-50%, -50%);
+  }
+
+  .node-box {
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    border: 2px solid;
+    white-space: nowrap;
+    text-align: center;
+  }
+
+  .node-sub {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: .08em;
+    opacity: .5;
+    text-transform: uppercase;
+  }
+
+  .node.ci { top: 50%; left: 12%; }
+  .node.ci .node-box { color: #3db4f5; border-color: rgba(61,180,245,.5); background: rgba(61,180,245,.08); }
+  .node.ci .node-sub { color: #3db4f5; }
+
+  .node.bao { top: 50%; left: 88%; }
+  .node.bao .node-box { color: #f5a943; border-color: rgba(245,169,67,.5); background: rgba(245,169,67,.08); }
+  .node.bao .node-sub { color: #f5a943; }
+
+  .node.host { top: 90%; left: 50%; }
+  .node.host .node-box { color: #2ecc7a; border-color: rgba(46,204,122,.5); background: rgba(46,204,122,.08); }
+  .node.host .node-sub { color: #2ecc7a; }
+
+  svg.arrows {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .expire-badge {
+    position: absolute;
+    top: 84%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: rgba(224,92,92,.8);
+    background: #0d1117;
+    border: 1px solid rgba(224,92,92,.35);
+    padding: 3px 12px;
+    border-radius: 99px;
+    white-space: nowrap;
+    z-index: 10;
+  }
+</style>
+</head>
+<body>
+<div class="slide">
+  <div class="slide-title">Demo 1 · CI/CD Deployment with SSH Certificates</div>
+  <div class="diagram">
+
+    <svg class="arrows" viewBox="0 0 820 480" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="#2a5c80"/>
+        </marker>
+        <marker id="arr-orange" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="rgba(245,169,67,.7)"/>
+        </marker>
+        <marker id="arr-green" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="rgba(46,204,122,.7)"/>
+        </marker>
+        <marker id="arr-red" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L0,6 L8,3 z" fill="rgba(224,92,92,.8)"/>
+        </marker>
+        <filter id="lbg" x="-20%" y="-40%" width="140%" height="180%">
+          <feFlood flood-color="#0d1117" result="bg"/>
+          <feMerge><feMergeNode in="bg"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- 1. CI → AppRole login → Bao -->
+      <line x1="155" y1="228" x2="660" y2="228"
+            stroke="#2a5c80" stroke-width="1.5" marker-end="url(#arr-blue)"/>
+      <text x="408" y="218" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="11" fill="#3a5a78" filter="url(#lbg)">AppRole login</text>
+
+      <!-- 2. Bao → signed cert → CI -->
+      <line x1="660" y1="254" x2="155" y2="254"
+            stroke="rgba(245,169,67,.6)" stroke-width="1.5" marker-end="url(#arr-orange)"/>
+      <text x="408" y="272" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="11" fill="rgba(245,169,67,.6)" filter="url(#lbg)">signed SSH cert</text>
+
+      <!-- 3. CI → deploy via cert → Host -->
+      <line x1="130" y1="268" x2="360" y2="410"
+            stroke="rgba(46,204,122,.5)" stroke-width="1.5" marker-end="url(#arr-green)"/>
+      <text x="210" y="365" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="11" fill="rgba(46,204,122,.55)" transform="rotate(-52, 210, 365)" filter="url(#lbg)">deploy via cert</text>
+
+      <!-- Lease Expires divider -->
+      <line x1="60" y1="390" x2="760" y2="390"
+            stroke="rgba(224,92,92,.2)" stroke-width="1" stroke-dasharray="4 6"/>
+
+      <!-- 4. Bao → TrustedUserCAKeys → Host -->
+      <line x1="690" y1="268" x2="455" y2="410"
+            stroke="rgba(245,169,67,.4)" stroke-width="1.5" stroke-dasharray="6 4" marker-end="url(#arr-orange)"/>
+      <text x="602" y="360" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="11" fill="rgba(245,169,67,.5)" transform="rotate(55, 602, 360)" filter="url(#lbg)">TrustedUserCAKeys</text>
+
+      <!-- Step label -->
+      <text x="408" y="206" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="9" fill="#1e3a58" letter-spacing="1">① PIPELINE STARTS</text>
+    </svg>
+
+    <div class="node ci">
+      <div class="node-box">GitLab CI/CD</div>
+    </div>
+
+    <div class="node bao">
+      <div class="node-box">OpenBao</div>
+      <span class="node-sub">SSH CA Engine</span>
+    </div>
+
+    <div class="node host">
+      <div class="node-box">Target Host</div>
+    </div>
+
+    <div class="expire-badge">⏱ Cert Expires · 30 min</div>
+
+  </div>
+</div>
+</body>
+</html>
