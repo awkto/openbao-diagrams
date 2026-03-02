@@ -17,24 +17,24 @@
   }
 
   .slide {
-    width: 820px;
-    padding: 40px 48px 48px;
+    width: 960px;
+    padding: 44px 56px 52px;
   }
 
   .slide-title {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 12px;
+    font-size: 16px;
     font-weight: 700;
-    letter-spacing: .16em;
+    letter-spacing: .14em;
     text-transform: uppercase;
     color: #3db4f5;
-    margin-bottom: 36px;
+    margin-bottom: 40px;
   }
 
   .diagram {
     position: relative;
     width: 100%;
-    height: 480px;
+    height: 520px;
   }
 
   .node {
@@ -42,14 +42,14 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     transform: translate(-50%, -50%);
   }
 
   .node-box {
-    padding: 12px 24px;
-    border-radius: 10px;
-    font-size: 14px;
+    padding: 16px 30px;
+    border-radius: 12px;
+    font-size: 18px;
     font-weight: 700;
     border: 2px solid;
     white-space: nowrap;
@@ -58,29 +58,29 @@
 
   .node-sub {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 9px;
+    font-size: 11px;
     font-weight: 500;
     letter-spacing: .08em;
-    opacity: .5;
+    opacity: .55;
     text-transform: uppercase;
   }
 
-  .node.acme { top: 50%; left: 12%; }
-  .node.acme .node-box { color: #3db4f5; border-color: rgba(61,180,245,.5); background: rgba(61,180,245,.08); }
-  .node.acme .node-sub { color: #3db4f5; }
+  /* Diamond layout: Root top, Bao center, acme.sh left, Web right */
+  .node.root { top: 10%; left: 50%; }
+  .node.root .node-box { color: rgba(245,169,67,.6); border-color: rgba(245,169,67,.3); background: rgba(245,169,67,.04); font-size: 15px; padding: 12px 24px; }
+  .node.root .node-sub { color: rgba(245,169,67,.4); }
 
-  .node.bao { top: 50%; left: 88%; }
+  .node.bao { top: 42%; left: 50%; }
   .node.bao .node-box { color: #f5a943; border-color: rgba(245,169,67,.5); background: rgba(245,169,67,.08); }
   .node.bao .node-sub { color: #f5a943; }
 
-  .node.web { top: 90%; left: 50%; }
+  .node.acme { top: 75%; left: 15%; }
+  .node.acme .node-box { color: #3db4f5; border-color: rgba(61,180,245,.5); background: rgba(61,180,245,.08); }
+  .node.acme .node-sub { color: #3db4f5; }
+
+  .node.web { top: 75%; left: 85%; }
   .node.web .node-box { color: #2ecc7a; border-color: rgba(46,204,122,.5); background: rgba(46,204,122,.08); }
   .node.web .node-sub { color: #2ecc7a; }
-
-  /* CA chain badge */
-  .node.root { top: 14%; left: 88%; }
-  .node.root .node-box { color: rgba(245,169,67,.5); border-color: rgba(245,169,67,.25); background: rgba(245,169,67,.04); font-size: 11px; padding: 8px 16px; }
-  .node.root .node-sub { color: rgba(245,169,67,.4); }
 
   svg.arrows {
     position: absolute;
@@ -90,33 +90,26 @@
     overflow: visible;
   }
 
-  .chain-line {
+  .badge {
     position: absolute;
-    top: 22%;
-    left: 88%;
-    transform: translateX(-50%);
-    width: 2px;
-    height: 50px;
-    border-left: 1.5px dashed rgba(245,169,67,.25);
-  }
-
-  .tls-badge {
-    position: absolute;
-    top: 84%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     font-family: 'JetBrains Mono', monospace;
-    font-size: 10px;
+    font-size: 13px;
     font-weight: 700;
-    letter-spacing: .12em;
+    letter-spacing: .1em;
     text-transform: uppercase;
-    color: rgba(46,204,122,.8);
     background: #0d1117;
-    border: 1px solid rgba(46,204,122,.35);
-    padding: 3px 12px;
+    padding: 5px 16px;
     border-radius: 99px;
     white-space: nowrap;
     z-index: 10;
+  }
+
+  .badge.tls {
+    top: 93%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: rgba(46,204,122,.8);
+    border: 1.5px solid rgba(46,204,122,.35);
   }
 </style>
 </head>
@@ -125,16 +118,16 @@
   <div class="slide-title">Demo 4 · PKI Engine &amp; ACME Certificates</div>
   <div class="diagram">
 
-    <svg class="arrows" viewBox="0 0 820 480" xmlns="http://www.w3.org/2000/svg">
+    <svg class="arrows" viewBox="0 0 960 520" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <marker id="arr-blue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-          <path d="M0,0 L0,6 L8,3 z" fill="#2a5c80"/>
+        <marker id="arr-orange" markerWidth="10" markerHeight="10" refX="7" refY="3.5" orient="auto">
+          <path d="M0,0 L0,7 L10,3.5 z" fill="rgba(245,169,67,.6)"/>
         </marker>
-        <marker id="arr-orange" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-          <path d="M0,0 L0,6 L8,3 z" fill="rgba(245,169,67,.7)"/>
+        <marker id="arr-blue" markerWidth="10" markerHeight="10" refX="7" refY="3.5" orient="auto">
+          <path d="M0,0 L0,7 L10,3.5 z" fill="rgba(61,180,245,.5)"/>
         </marker>
-        <marker id="arr-green" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
-          <path d="M0,0 L0,6 L8,3 z" fill="rgba(46,204,122,.7)"/>
+        <marker id="arr-green" markerWidth="10" markerHeight="10" refX="7" refY="3.5" orient="auto">
+          <path d="M0,0 L0,7 L10,3.5 z" fill="rgba(46,204,122,.6)"/>
         </marker>
         <filter id="lbg" x="-20%" y="-40%" width="140%" height="180%">
           <feFlood flood-color="#0d1117" result="bg"/>
@@ -142,41 +135,38 @@
         </filter>
       </defs>
 
-      <!-- Root CA → Intermediate chain line -->
-      <line x1="722" y1="105" x2="722" y2="210"
-            stroke="rgba(245,169,67,.25)" stroke-width="1.5" stroke-dasharray="4 4"/>
+      <!-- Root CA → Intermediate CA chain -->
+      <line x1="480" y1="82" x2="480" y2="190"
+            stroke="rgba(245,169,67,.3)" stroke-width="2" stroke-dasharray="5 4"/>
+      <text x="540" y="140" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="13" fill="rgba(245,169,67,.35)" filter="url(#lbg)">signs</text>
 
-      <!-- 1. acme.sh → ACME request → Bao -->
-      <line x1="165" y1="228" x2="660" y2="228"
-            stroke="#2a5c80" stroke-width="1.5" marker-end="url(#arr-blue)"/>
-      <text x="408" y="218" text-anchor="middle" font-family="JetBrains Mono, monospace"
-            font-size="11" fill="#3a5a78" filter="url(#lbg)">ACME challenge</text>
+      <!-- acme.sh → ACME challenge → Bao (diagonal up-right) -->
+      <line x1="210" y1="365" x2="415" y2="240"
+            stroke="rgba(61,180,245,.4)" stroke-width="2" marker-end="url(#arr-blue)"/>
+      <text x="270" y="280" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="14" fill="rgba(61,180,245,.5)" transform="rotate(-45, 270, 280)" filter="url(#lbg)">ACME challenge</text>
 
-      <!-- 2. Bao → TLS cert → acme.sh -->
-      <line x1="660" y1="254" x2="165" y2="254"
-            stroke="rgba(245,169,67,.6)" stroke-width="1.5" marker-end="url(#arr-orange)"/>
-      <text x="408" y="272" text-anchor="middle" font-family="JetBrains Mono, monospace"
-            font-size="11" fill="rgba(245,169,67,.6)" filter="url(#lbg)">signed TLS cert</text>
+      <!-- Bao → signed TLS cert → acme.sh (parallel return) -->
+      <line x1="420" y1="258" x2="220" y2="375"
+            stroke="rgba(245,169,67,.5)" stroke-width="2" marker-end="url(#arr-orange)"/>
+      <text x="365" y="340" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="14" fill="rgba(245,169,67,.5)" transform="rotate(-45, 365, 340)" filter="url(#lbg)">TLS cert</text>
 
-      <!-- 3. acme.sh → install cert → Web Server -->
-      <line x1="130" y1="268" x2="360" y2="410"
-            stroke="rgba(46,204,122,.5)" stroke-width="1.5" marker-end="url(#arr-green)"/>
-      <text x="210" y="365" text-anchor="middle" font-family="JetBrains Mono, monospace"
-            font-size="11" fill="rgba(46,204,122,.55)" transform="rotate(-52, 210, 365)" filter="url(#lbg)">install cert</text>
+      <!-- acme.sh → install cert → Web Server (horizontal bottom) -->
+      <line x1="240" y1="395" x2="740" y2="395"
+            stroke="rgba(46,204,122,.4)" stroke-width="2" marker-end="url(#arr-green)"/>
+      <text x="480" y="383" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="14" fill="rgba(46,204,122,.5)" filter="url(#lbg)">install cert</text>
 
-      <!-- Divider -->
-      <line x1="60" y1="390" x2="760" y2="390"
-            stroke="rgba(46,204,122,.15)" stroke-width="1" stroke-dasharray="4 6"/>
-
-      <!-- Step label -->
-      <text x="408" y="206" text-anchor="middle" font-family="JetBrains Mono, monospace"
-            font-size="9" fill="#1e3a58" letter-spacing="1">① ACME PROTOCOL FLOW</text>
+      <!-- Step numbers -->
+      <text x="280" y="260" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="12" fill="rgba(61,180,245,.3)" letter-spacing="1" filter="url(#lbg)">①</text>
+      <text x="350" y="355" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="12" fill="rgba(245,169,67,.3)" letter-spacing="1" filter="url(#lbg)">②</text>
+      <text x="480" y="420" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="12" fill="rgba(46,204,122,.3)" letter-spacing="1" filter="url(#lbg)">③</text>
     </svg>
-
-    <div class="node acme">
-      <div class="node-box">acme.sh</div>
-      <span class="node-sub">ACME Client</span>
-    </div>
 
     <div class="node root">
       <div class="node-box">Root CA</div>
@@ -184,14 +174,20 @@
 
     <div class="node bao">
       <div class="node-box">OpenBao</div>
-      <span class="node-sub">Intermediate CA</span>
+      <span class="node-sub">Intermediate CA · PKI Engine</span>
+    </div>
+
+    <div class="node acme">
+      <div class="node-box">acme.sh</div>
+      <span class="node-sub">ACME Client</span>
     </div>
 
     <div class="node web">
       <div class="node-box">Web Server</div>
+      <span class="node-sub">acme-demo.sdemo.tux42.au</span>
     </div>
 
-    <div class="tls-badge">🔒 Valid TLS · Self-Signed → CA-Signed</div>
+    <div class="badge tls">Self-Signed → CA-Signed</div>
 
   </div>
 </div>
