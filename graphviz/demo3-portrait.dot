@@ -1,0 +1,82 @@
+digraph demo3 {
+    bgcolor="#0d1117"
+    rankdir=TB
+    dpi=150
+    pad=0.5
+    nodesep=0.8
+    ranksep=1.2
+
+    node [
+        shape=box
+        style="rounded,filled"
+        fontname="Inter"
+        fontsize=16
+        penwidth=2
+        width=2.2
+        height=0.6
+    ]
+
+    edge [
+        fontname="JetBrains Mono"
+        fontsize=11
+        penwidth=2
+    ]
+
+    user [
+        label="User"
+        fillcolor="#0d1117"
+        fontcolor="#c084fc"
+        color="#c084fc80"
+    ]
+
+    bao [
+        label="OpenBao\n(SSH CA)"
+        fillcolor="#0d1117"
+        fontcolor="#f5a943"
+        color="#f5a94380"
+    ]
+
+    host [
+        label="Target Host\n(sshd)"
+        fillcolor="#0d1117"
+        fontcolor="#2ecc7a"
+        color="#2ecc7a80"
+    ]
+
+    user -> bao [
+        label="sign pubkey"
+        color="#c084fc66"
+        fontcolor="#c084fc80"
+    ]
+
+    bao -> user [
+        label="signed cert"
+        color="#f5a94380"
+        fontcolor="#f5a94380"
+    ]
+
+    user -> host [
+        label="SSH with cert"
+        color="#2ecc7a66"
+        fontcolor="#2ecc7a73"
+    ]
+
+    bao -> host [
+        label="TrustedCA"
+        color="#f5a9434d"
+        fontcolor="#f5a94359"
+        style=dashed
+    ]
+
+    ttl [
+        label="5 min TTL"
+        shape=none
+        fillcolor=none
+        style=""
+        fontname="JetBrains Mono"
+        fontsize=12
+        fontcolor="#e05c5ccc"
+    ]
+
+    host -> ttl [style=invis]
+}

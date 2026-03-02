@@ -1,0 +1,91 @@
+digraph demo4 {
+    bgcolor="#0d1117"
+    rankdir=TB
+    dpi=150
+    pad=0.5
+    nodesep=0.8
+    ranksep=1.0
+
+    node [
+        shape=box
+        style="rounded,filled"
+        fontname="Inter"
+        fontsize=16
+        penwidth=2
+        width=2.2
+        height=0.6
+    ]
+
+    edge [
+        fontname="JetBrains Mono"
+        fontsize=11
+        penwidth=2
+    ]
+
+    root [
+        label="Root CA"
+        fillcolor="#0d1117"
+        fontcolor="#f5a9438c"
+        color="#f5a9434d"
+        fontsize=14
+    ]
+
+    bao [
+        label="OpenBao\n(Intermediate CA)"
+        fillcolor="#0d1117"
+        fontcolor="#f5a943"
+        color="#f5a94380"
+    ]
+
+    acme [
+        label="acme.sh\n(ACME Client)"
+        fillcolor="#0d1117"
+        fontcolor="#3db4f5"
+        color="#3db4f580"
+    ]
+
+    web [
+        label="Web Server"
+        fillcolor="#0d1117"
+        fontcolor="#2ecc7a"
+        color="#2ecc7a80"
+    ]
+
+    root -> bao [
+        label="signs"
+        color="#f5a9434d"
+        fontcolor="#f5a9434d"
+        style=dashed
+        penwidth=1.5
+    ]
+
+    acme -> bao [
+        label="ACME"
+        color="#3db4f566"
+        fontcolor="#3db4f580"
+    ]
+
+    bao -> acme [
+        label="TLS cert"
+        color="#f5a94380"
+        fontcolor="#f5a94380"
+    ]
+
+    acme -> web [
+        label="install cert"
+        color="#2ecc7a66"
+        fontcolor="#2ecc7a73"
+    ]
+
+    badge [
+        label="Self-Signed → CA-Signed"
+        shape=none
+        fillcolor=none
+        style=""
+        fontname="JetBrains Mono"
+        fontsize=12
+        fontcolor="#2ecc7acc"
+    ]
+
+    web -> badge [style=invis]
+}

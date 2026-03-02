@@ -1,0 +1,95 @@
+digraph demo5 {
+    bgcolor="#0d1117"
+    rankdir=TB
+    dpi=150
+    pad=0.5
+    nodesep=0.8
+    ranksep=1.2
+
+    node [
+        shape=box
+        style="rounded,filled"
+        fontname="Inter"
+        fontsize=16
+        penwidth=2
+        width=2.2
+        height=0.6
+    ]
+
+    edge [
+        fontname="JetBrains Mono"
+        fontsize=11
+        penwidth=2
+    ]
+
+    ci [
+        label="CI Runner"
+        fillcolor="#0d1117"
+        fontcolor="#3db4f5"
+        color="#3db4f580"
+    ]
+
+    bao [
+        label="OpenBao\n(Transit)"
+        fillcolor="#0d1117"
+        fontcolor="#f5a943"
+        color="#f5a94380"
+    ]
+
+    enduser [
+        label="End User"
+        fillcolor="#0d1117"
+        fontcolor="#2ecc7a"
+        color="#2ecc7a80"
+    ]
+
+    ci -> bao [
+        label="SHA-256"
+        color="#3db4f566"
+        fontcolor="#3db4f580"
+    ]
+
+    bao -> ci [
+        label="signature"
+        color="#f5a94380"
+        fontcolor="#f5a94380"
+    ]
+
+    ci -> enduser [
+        label="binary + sig"
+        color="#2ecc7a59"
+        fontcolor="#2ecc7a66"
+    ]
+
+    enduser -> bao [
+        label="verify"
+        color="#2ecc7a4d"
+        fontcolor="#2ecc7a66"
+        style=dashed
+    ]
+
+    badges [
+        label="✓ Valid    ✕ Tampered"
+        shape=none
+        fillcolor=none
+        style=""
+        fontname="JetBrains Mono"
+        fontsize=12
+        fontcolor="#2ecc7acc"
+    ]
+
+    enduser -> badges [style=invis]
+
+    keylabel [
+        label="Key never leaves"
+        shape=none
+        fillcolor=none
+        style=""
+        fontname="JetBrains Mono"
+        fontsize=10
+        fontcolor="#f5a9438c"
+    ]
+
+    keylabel -> bao [style=invis]
+    { rank=same; keylabel; bao }
+}

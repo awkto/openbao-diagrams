@@ -22,7 +22,10 @@ jobs:
       - name: Install Graphviz
         run: sudo apt-get update && sudo apt-get install -y graphviz
       - name: Render Graphviz diagrams
-        run: dot -Tpng graphviz/demo1-portrait.dot -o graphviz/demo1-portrait.png
+        run: |
+          for f in graphviz/*.dot; do
+            dot -Tpng "$f" -o "${f%.dot}.png"
+          done
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

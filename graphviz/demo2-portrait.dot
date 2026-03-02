@@ -1,0 +1,82 @@
+digraph demo2 {
+    bgcolor="#0d1117"
+    rankdir=TB
+    dpi=150
+    pad=0.5
+    nodesep=0.8
+    ranksep=1.2
+
+    node [
+        shape=box
+        style="rounded,filled"
+        fontname="Inter"
+        fontsize=16
+        penwidth=2
+        width=2.2
+        height=0.6
+    ]
+
+    edge [
+        fontname="JetBrains Mono"
+        fontsize=11
+        penwidth=2
+    ]
+
+    app [
+        label="Web App"
+        fillcolor="#0d1117"
+        fontcolor="#3db4f5"
+        color="#3db4f580"
+    ]
+
+    bao [
+        label="OpenBao\n(Database Engine)"
+        fillcolor="#0d1117"
+        fontcolor="#f5a943"
+        color="#f5a94380"
+    ]
+
+    pg [
+        label="PostgreSQL"
+        fillcolor="#0d1117"
+        fontcolor="#2ecc7a"
+        color="#2ecc7a80"
+    ]
+
+    app -> bao [
+        label="request creds"
+        color="#3db4f566"
+        fontcolor="#3db4f580"
+    ]
+
+    bao -> app [
+        label="temp creds"
+        color="#2ecc7a80"
+        fontcolor="#2ecc7a80"
+    ]
+
+    app -> pg [
+        label="connect"
+        color="#2ecc7a66"
+        fontcolor="#2ecc7a73"
+    ]
+
+    bao -> pg [
+        label="DROP ROLE"
+        color="#e05c5c99"
+        fontcolor="#e05c5c99"
+        style=dashed
+    ]
+
+    ttl [
+        label="Lease Expires"
+        shape=none
+        fillcolor=none
+        style=""
+        fontname="JetBrains Mono"
+        fontsize=12
+        fontcolor="#e05c5ccc"
+    ]
+
+    pg -> ttl [style=invis]
+}
