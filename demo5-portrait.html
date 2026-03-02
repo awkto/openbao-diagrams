@@ -35,13 +35,13 @@
     font-family: 'JetBrains Mono', monospace; font-size: 10px;
     font-weight: 500; letter-spacing: .08em; opacity: .55; text-transform: uppercase;
   }
-  /* CI top-left, Bao right, End User bottom-left */
-  .node.ci { top: 14%; left: 30%; }
+  /* Vertical: CI top, Bao middle, End User bottom */
+  .node.ci { top: 10%; left: 50%; }
   .node.ci .node-box { color: #3db4f5; border-color: rgba(61,180,245,.5); background: rgba(61,180,245,.08); }
-  .node.bao { top: 40%; left: 75%; }
+  .node.bao { top: 42%; left: 50%; }
   .node.bao .node-box { color: #f5a943; border-color: rgba(245,169,67,.5); background: rgba(245,169,67,.08); }
   .node.bao .node-sub { color: #f5a943; }
-  .node.enduser { top: 72%; left: 30%; }
+  .node.enduser { top: 78%; left: 50%; }
   .node.enduser .node-box { color: #2ecc7a; border-color: rgba(46,204,122,.5); background: rgba(46,204,122,.08); }
   .node.enduser .node-sub { color: #2ecc7a; }
   svg.arrows { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
@@ -52,29 +52,29 @@
     padding: 4px 14px; border-radius: 99px; white-space: nowrap; z-index: 10;
   }
   .badge.key {
-    top: 14%; left: 75%; transform: translate(-50%, -130%);
+    top: 35%; left: 50%; transform: translate(-50%, -50%);
     color: rgba(245,169,67,.55); border: 1.5px solid rgba(245,169,67,.25);
     font-size: 10px;
   }
   .badge.valid {
-    top: 92%; left: 28%; transform: translate(-50%, -50%);
+    top: 94%; left: 28%; transform: translate(-50%, -50%);
     color: rgba(46,204,122,.8); border: 1.5px solid rgba(46,204,122,.35);
   }
   .badge.tamper {
-    top: 92%; left: 72%; transform: translate(-50%, -50%);
+    top: 94%; left: 72%; transform: translate(-50%, -50%);
     color: rgba(224,92,92,.8); border: 1.5px solid rgba(224,92,92,.35);
   }
   .lane-divider {
-    position: absolute; top: 52%; left: 8%; width: 42%;
-    border-top: 1.5px dashed rgba(255,255,255,.06);
+    position: absolute; top: 58%; left: 5%; width: 90%;
+    border-top: 1.5px dashed rgba(255,255,255,.12);
   }
   .lane-label {
     position: absolute; font-family: 'JetBrains Mono', monospace;
     font-size: 10px; font-weight: 700; letter-spacing: .14em;
-    text-transform: uppercase; color: rgba(255,255,255,.08);
+    text-transform: uppercase; color: rgba(255,255,255,.2);
   }
-  .lane-label.sign { top: 5%; left: 8%; }
-  .lane-label.verify { top: 55%; left: 8%; }
+  .lane-label.sign { top: 4%; left: 5%; }
+  .lane-label.verify { top: 60%; left: 5%; }
 </style>
 </head>
 <body>
@@ -99,29 +99,29 @@
         </filter>
       </defs>
 
-      <!-- CI → hash → Bao -->
-      <line x1="195" y1="70" x2="310" y2="200"
+      <!-- CI → SHA-256 → Bao (left side, outside boxes) -->
+      <line x1="155" y1="85" x2="155" y2="215"
             stroke="rgba(61,180,245,.4)" stroke-width="2" marker-end="url(#arr-blue)"/>
-      <text x="225" y="150" text-anchor="middle" font-family="JetBrains Mono, monospace"
-            font-size="13" fill="rgba(61,180,245,.5)" transform="rotate(-47, 225, 150)" filter="url(#lbg)">SHA-256</text>
+      <text x="118" y="152" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="13" fill="rgba(61,180,245,.5)" transform="rotate(-90, 118, 152)" filter="url(#lbg)">SHA-256</text>
 
-      <!-- Bao → signature → CI -->
-      <line x1="315" y1="215" x2="200" y2="90"
+      <!-- Bao → signature → CI (right side, outside boxes) -->
+      <line x1="325" y1="215" x2="325" y2="85"
             stroke="rgba(245,169,67,.5)" stroke-width="2" marker-end="url(#arr-orange)"/>
-      <text x="300" y="140" text-anchor="middle" font-family="JetBrains Mono, monospace"
-            font-size="13" fill="rgba(245,169,67,.5)" transform="rotate(-47, 300, 140)" filter="url(#lbg)">signature</text>
+      <text x="362" y="152" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="13" fill="rgba(245,169,67,.5)" transform="rotate(90, 362, 152)" filter="url(#lbg)">signature</text>
 
-      <!-- CI → binary+sig → End User (vertical left) -->
-      <line x1="144" y1="110" x2="144" y2="385"
-            stroke="rgba(46,204,122,.35)" stroke-width="2" marker-end="url(#arr-green)"/>
-      <text x="118" y="260" text-anchor="middle" font-family="JetBrains Mono, monospace"
-            font-size="12" fill="rgba(46,204,122,.4)" transform="rotate(-90, 118, 260)" filter="url(#lbg)">binary + sig</text>
+      <!-- CI → binary+sig → End User (left arc) -->
+      <path d="M 170 85 Q 55 290 170 425"
+            stroke="rgba(46,204,122,.4)" stroke-width="2" fill="none" marker-end="url(#arr-green)"/>
+      <text x="70" y="275" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="12" fill="rgba(46,204,122,.45)" transform="rotate(-90, 70, 275)" filter="url(#lbg)">binary + sig</text>
 
-      <!-- End User → verify → Bao -->
-      <line x1="195" y1="410" x2="310" y2="265"
-            stroke="rgba(46,204,122,.3)" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#arr-green)"/>
-      <text x="290" y="360" text-anchor="middle" font-family="JetBrains Mono, monospace"
-            font-size="13" fill="rgba(46,204,122,.4)" transform="rotate(-47, 290, 360)" filter="url(#lbg)">verify</text>
+      <!-- End User → verify → Bao (right arc, dashed) -->
+      <path d="M 310 425 Q 420 320 310 270"
+            stroke="rgba(46,204,122,.35)" stroke-width="2" fill="none" stroke-dasharray="6 5" marker-end="url(#arr-green)"/>
+      <text x="400" y="350" text-anchor="middle" font-family="JetBrains Mono, monospace"
+            font-size="12" fill="rgba(46,204,122,.4)" transform="rotate(90, 400, 350)" filter="url(#lbg)">verify</text>
     </svg>
 
     <div class="node ci">
